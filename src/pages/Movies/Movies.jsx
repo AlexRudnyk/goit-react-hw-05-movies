@@ -1,8 +1,9 @@
 import { fetchMoviesByQuery } from 'components/Api/Api';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, ErrorMessage } from 'formik';
 import { useState, useEffect } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import * as yup from 'yup';
+import { SearchInput, SearchButton, ItemLink, Item } from './Movies.styled';
 
 const schema = yup.object().shape({
   inputValue: yup
@@ -43,17 +44,21 @@ const Movies = () => {
         onSubmit={handleSubmit}
       >
         <Form>
-          <Field type="text" name="inputValue" placeholder="Search movies" />
-          <button type="submit">Search</button>
+          <SearchInput
+            type="text"
+            name="inputValue"
+            placeholder="Search movies"
+          />
+          <SearchButton type="submit">Search</SearchButton>
           <ErrorMessage name="inputValue" />
         </Form>
       </Formik>
       {movies.length !== 0 && !error && (
         <ul>
           {movies.map(({ id, title, name }) => (
-            <li key={id}>
-              <Link to={`/movies/${id}`}>{title || name}</Link>
-            </li>
+            <Item key={id}>
+              <ItemLink to={`/movies/${id}`}>{title || name}</ItemLink>
+            </Item>
           ))}
         </ul>
       )}

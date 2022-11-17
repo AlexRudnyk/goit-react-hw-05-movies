@@ -8,8 +8,14 @@ const navItems = [
 
 const AppBar = () => {
   return (
-    <Box as="header" borderBottom="normal" py={5}>
-      <Box as="nav">
+    <Box
+      as="header"
+      py={5}
+      mb={5}
+      boxShadow="0 1px 4px rgba(0, 0, 0, 1), -23px 0 20px -23px rgba(0, 0, 0, 0.8),
+    23px 0 20px -23px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 0, 0, 0.1) inset;"
+    >
+      <Box as="nav" px={4}>
         {navItems.map(({ href, text }) => (
           <NavItem to={href} key={href}>
             {text}

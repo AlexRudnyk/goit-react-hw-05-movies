@@ -1,6 +1,7 @@
 import { fetchMovieCast } from 'components/Api/Api';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { CastImg } from './Cast.styled';
 
 const Cast = () => {
   const { movieId } = useParams();
@@ -25,7 +26,7 @@ const Cast = () => {
         <ul>
           {castInfo.cast.map(({ id, profile_path, name, character }) => (
             <li key={id}>
-              <img
+              <CastImg
                 src={
                   profile_path
                     ? `https://image.tmdb.org/t/p/w300${profile_path}`

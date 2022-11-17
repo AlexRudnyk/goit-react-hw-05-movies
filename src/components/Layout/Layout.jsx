@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 
 export const Layout = () => {
   return (
-    <Box>
+    <Box width="1200px" ml="auto" mr="auto" px={5}>
       <AppBar />
       <Outlet />
     </Box>
