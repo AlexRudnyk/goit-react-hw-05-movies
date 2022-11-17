@@ -1,4 +1,7 @@
+import { fetchMoviesByQuery } from 'components/Api/Api';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { useState, useEffect } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import * as yup from 'yup';
 
 const schema = yup.object().shape({
@@ -10,21 +13,51 @@ const schema = yup.object().shape({
 });
 
 const Movies = () => {
-  const handleSubmit = (values, { resetForm }) => {
+  const [movies, setMovies] = useState([]);
+  const [error, setError] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const query = searchParams.get('query');
+
+  useEffect(() => {
+    if (!query) return;
+    async function fetchItems() {
+      try {
+        const item = await fetchMoviesByQuery(query);
+        setMovies(item.results);
+      } catch (error) {
+        setError(error);
+      }
+    }
+    fetchItems();
+  }, [query]);
+
+  const handleSubmit = ({ inputValue }, { resetForm }) => {
+    setSearchParams({ query: inputValue });
     resetForm();
   };
   return (
-    <Formik
-      initialValues={{ inputValue: '' }}
-      validationSchema={schema}
-      onSubmit={handleSubmit}
-    >
-      <Form>
-        <Field type="text" name="inputValue" />
-        <button type="submit">Search</button>
-        <ErrorMessage name="inputValue" component="div" />
-      </Form>
-    </Formik>
+    <>
+      <Formik
+        initialValues={{ inputValue: '' }}
+        validationSchema={schema}
+        onSubmit={handleSubmit}
+      >
+        <Form>
+          <Field type="text" name="inputValue" placeholder="Search movies" />
+          <button type="submit">Search</button>
+          <ErrorMessage name="inputValue" />
+        </Form>
+      </Formik>
+      {movies.length !== 0 && !error && (
+        <ul>
+          {movies.map(({ id, title, name }) => (
+            <li key={id}>
+              <Link to={`/movies/${id}`}>{title || name}</Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </>
   );
 };
 

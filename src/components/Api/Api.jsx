@@ -16,3 +16,10 @@ export const fetchMoviesById = async id => {
   );
   return response.data;
 };
+
+export const fetchMoviesByQuery = async query => {
+  const response = await axios.get(
+    `${BASE_URL}search/movie?api_key=${API_KEY}&query=${query}`
+  );
+  return response.data;
+};
