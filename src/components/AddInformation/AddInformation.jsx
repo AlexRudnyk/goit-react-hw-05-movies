@@ -1,9 +1,10 @@
+import { Box } from 'components/Box';
 import { Link } from 'react-router-dom';
 
 const AddInformation = () => {
   return (
     <>
-      <div>
+      <Box borderTop="normal" borderBottom="normal">
         <h4>Additional information</h4>
         <ul>
           <li>
@@ -13,7 +14,7 @@ const AddInformation = () => {
             <Link to="reviews">Reviews</Link>
           </li>
         </ul>
-      </div>
+      </Box>
     </>
   );
 };
