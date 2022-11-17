@@ -1,7 +1,8 @@
-import { fetchMoviesById } from 'components/Api/Api';
+import { fetchMoviesById } from '../../components/Api/Api';
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router-dom';
 import MovieMarkup from 'components/MovieMarkup';
+import AddInformation from 'components/AddInformation/AddInformation';
 
 const MovieDetails = () => {
   const { movieId } = useParams();
@@ -23,6 +24,8 @@ const MovieDetails = () => {
   return (
     <div>
       <MovieMarkup movie={movie} error={error} />
+      <AddInformation />
+      <Outlet />
     </div>
   );
 };
