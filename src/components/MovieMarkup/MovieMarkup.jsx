@@ -1,5 +1,6 @@
 import { Box } from 'components/Box';
 import { MovieImg } from './MovieMarkup.styled';
+import BackLink from '../../components/BackLink';
 
 const MovieMarkup = ({ movie, error }) => {
   const { poster_path, original_title, genres, overview, vote_average } = movie;
@@ -8,6 +9,7 @@ const MovieMarkup = ({ movie, error }) => {
     <main>
       {movie.length !== 0 && !error && (
         <>
+          <BackLink />
           <Box display="flex" mb={5}>
             <MovieImg
               src={

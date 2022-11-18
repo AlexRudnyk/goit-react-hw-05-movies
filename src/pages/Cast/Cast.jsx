@@ -1,20 +1,26 @@
 import { fetchMovieCast } from 'components/Api/Api';
+import { Box } from 'components/Box';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { CastImg } from './Cast.styled';
+import { CastImg, Item } from './Cast.styled';
+import Spinner from '../../components/Spinner';
 
 const Cast = () => {
   const { movieId } = useParams();
   const [castInfo, setCastInfo] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function fetchCastInfo() {
+      setLoading(true);
       try {
         const info = await fetchMovieCast(movieId);
         setCastInfo(info);
       } catch (error) {
         setError(error);
+      } finally {
+        setLoading(false);
       }
     }
     fetchCastInfo();
@@ -22,10 +28,11 @@ const Cast = () => {
 
   return (
     <div>
+      {loading && <Spinner />}
       {castInfo.length !== 0 && !error && (
         <ul>
           {castInfo.cast.map(({ id, profile_path, name, character }) => (
-            <li key={id}>
+            <Item key={id}>
               <CastImg
                 src={
                   profile_path
@@ -34,9 +41,11 @@ const Cast = () => {
                 }
                 alt={name}
               />
-              <p>{name}</p>
-              <p>Character: {character}</p>
-            </li>
+              <Box>
+                <h3>{name}</h3>
+                <p>Character: {character}</p>
+              </Box>
+            </Item>
           ))}
         </ul>
       )}

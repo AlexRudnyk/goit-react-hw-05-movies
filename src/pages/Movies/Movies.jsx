@@ -1,9 +1,10 @@
 import { fetchMoviesByQuery } from 'components/Api/Api';
 import { Formik, Form, ErrorMessage } from 'formik';
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import * as yup from 'yup';
 import { SearchInput, SearchButton, ItemLink, Item } from './Movies.styled';
+import Spinner from '../../components/Spinner';
 
 const schema = yup.object().shape({
   inputValue: yup
@@ -16,17 +17,22 @@ const schema = yup.object().shape({
 const Movies = () => {
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get('query');
+  const location = useLocation();
 
   useEffect(() => {
     if (!query) return;
     async function fetchItems() {
+      setLoading(true);
       try {
         const item = await fetchMoviesByQuery(query);
         setMovies(item.results);
       } catch (error) {
         setError(error);
+      } finally {
+        setLoading(false);
       }
     }
     fetchItems();
@@ -53,11 +59,14 @@ const Movies = () => {
           <ErrorMessage name="inputValue" />
         </Form>
       </Formik>
+      {loading && <Spinner />}
       {movies.length !== 0 && !error && (
         <ul>
           {movies.map(({ id, title, name }) => (
             <Item key={id}>
-              <ItemLink to={`/movies/${id}`}>{title || name}</ItemLink>
+              <ItemLink to={`/movies/${id}`} state={{ from: location }}>
+                {title || name}
+              </ItemLink>
             </Item>
           ))}
         </ul>
