@@ -4,6 +4,7 @@ import { Outlet, useParams } from 'react-router-dom';
 import MovieMarkup from 'components/MovieMarkup';
 import AddInformation from 'components/AddInformation/AddInformation';
 import Spinner from '../../components/Spinner';
+import BackLink from 'components/BackLink/BackLink';
 
 const MovieDetails = () => {
   const { movieId } = useParams();
@@ -29,6 +30,7 @@ const MovieDetails = () => {
   return (
     <div>
       {loading && <Spinner />}
+      <BackLink />
       <MovieMarkup movie={movie} error={error} />
       <AddInformation />
       <Outlet />
