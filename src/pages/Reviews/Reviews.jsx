@@ -15,8 +15,8 @@ const Reviews = () => {
     async function fetchReviews() {
       setStatus('pending');
       try {
-        const reviews = await fetchMovieReviews(movieId);
-        setReviews(reviews);
+        const review = await fetchMovieReviews(movieId);
+        setReviews(review);
         setStatus('resolved');
       } catch (error) {
         console.log(error);
@@ -32,7 +32,7 @@ const Reviews = () => {
         {status === 'pending' && <Spinner />}
         {status === 'resolved' && (
           <ul>
-            {reviews.results.map(({ id, author, content }) => (
+            {reviews.map(({ id, author, content }) => (
               <ReviewItem key={id}>
                 <h4>Author: {author}</h4>
                 <p>{content}</p>

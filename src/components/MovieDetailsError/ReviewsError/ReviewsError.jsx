@@ -1,7 +1,7 @@
 export const ReviewsError = () => {
   return (
     <div>
-      <p>Sorry, we didn't find any reviews about this movie</p>
+      <p>Sorry, we don't have any reviews for this movie</p>
     </div>
   );
 };

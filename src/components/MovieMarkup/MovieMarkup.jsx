@@ -1,5 +1,6 @@
 import { Box } from 'components/Box';
 import { MovieImg } from './MovieMarkup.styled';
+import PropTypes from 'prop-types';
 
 const MovieMarkup = ({ movie }) => {
   const { poster_path, original_title, genres, overview, vote_average } = movie;
@@ -32,6 +33,16 @@ const MovieMarkup = ({ movie }) => {
       )}
     </main>
   );
+};
+
+MovieMarkup.propTypes = {
+  movie: PropTypes.shape({
+    poster_path: PropTypes.string,
+    original_title: PropTypes.string,
+    genres: PropTypes.array,
+    overview: PropTypes.string,
+    vote_average: PropTypes.number,
+  }),
 };
 
 export default MovieMarkup;

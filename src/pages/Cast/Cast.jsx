@@ -33,7 +33,7 @@ const Cast = () => {
       {status === 'pending' && <Spinner />}
       {status === 'resolved' && (
         <ul>
-          {castInfo.cast.map(({ id, profile_path, name, character }) => (
+          {castInfo.map(({ id, profile_path, name, character }) => (
             <Item key={id}>
               <CastImg
                 src={
