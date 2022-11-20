@@ -2,22 +2,22 @@ import { useState, useEffect } from 'react';
 import { fetchTrendingMovies } from '../../components/Api/Api';
 import { Item, ItemLink } from './Home.styled';
 import Spinner from '../../components/Spinner';
+import { Error } from 'components/Error/Error';
 
 const Home = () => {
   const [movies, setMovies] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState('idle');
 
   useEffect(() => {
     async function fetchItems() {
-      setLoading(true);
+      setStatus('pending');
       try {
         const items = await fetchTrendingMovies();
         setMovies(items.results);
+        setStatus('resolved');
       } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
+        console.log(error);
+        setStatus('rejected');
       }
     }
     fetchItems();
@@ -26,8 +26,8 @@ const Home = () => {
   return (
     <>
       <h1>Trending today</h1>
-      {loading && <Spinner />}
-      {!error && (
+      {status === 'pending' && <Spinner />}
+      {status === 'resolved' && (
         <ul>
           {movies.map(({ id, title, name }) => (
             <Item key={id}>
@@ -36,6 +36,7 @@ const Home = () => {
           ))}
         </ul>
       )}
+      {status === 'rejected' && <Error />}
     </>
   );
 };

@@ -5,6 +5,7 @@ import { useLocation, useSearchParams } from 'react-router-dom';
 import * as yup from 'yup';
 import { SearchInput, SearchButton, ItemLink, Item } from './Movies.styled';
 import Spinner from '../../components/Spinner';
+import { Error } from 'components/Error/Error';
 
 const schema = yup.object().shape({
   inputValue: yup
@@ -16,8 +17,7 @@ const schema = yup.object().shape({
 
 const Movies = () => {
   const [movies, setMovies] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState('idle');
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get('query');
   const location = useLocation();
@@ -25,14 +25,14 @@ const Movies = () => {
   useEffect(() => {
     if (!query) return;
     async function fetchItems() {
-      setLoading(true);
+      setStatus('pending');
       try {
         const item = await fetchMoviesByQuery(query);
         setMovies(item.results);
+        setStatus('resolved');
       } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
+        console.log(error);
+        setStatus('rejected');
       }
     }
     fetchItems();
@@ -59,8 +59,8 @@ const Movies = () => {
           <ErrorMessage name="inputValue" />
         </Form>
       </Formik>
-      {loading && <Spinner />}
-      {movies.length !== 0 && !error && (
+      {status === 'pending' && <Spinner />}
+      {status === 'resolved' && (
         <ul>
           {movies.map(({ id, title, name }) => (
             <Item key={id}>
@@ -71,6 +71,7 @@ const Movies = () => {
           ))}
         </ul>
       )}
+      {status === 'rejected' && <Error />}
     </>
   );
 };

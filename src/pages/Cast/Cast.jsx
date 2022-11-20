@@ -4,23 +4,25 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { CastImg, Item } from './Cast.styled';
 import Spinner from '../../components/Spinner';
+import { CastError } from 'components/MovieDetailsError/CastError/CastError';
 
 const Cast = () => {
   const { movieId } = useParams();
   const [castInfo, setCastInfo] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState('idle');
 
   useEffect(() => {
+    if (!movieId) return;
+
     async function fetchCastInfo() {
-      setLoading(true);
+      setStatus('pending');
       try {
         const info = await fetchMovieCast(movieId);
         setCastInfo(info);
+        setStatus('resolved');
       } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
+        console.log(error);
+        setStatus('rejected');
       }
     }
     fetchCastInfo();
@@ -28,8 +30,8 @@ const Cast = () => {
 
   return (
     <div>
-      {loading && <Spinner />}
-      {castInfo.length !== 0 && !error && (
+      {status === 'pending' && <Spinner />}
+      {status === 'resolved' && (
         <ul>
           {castInfo.cast.map(({ id, profile_path, name, character }) => (
             <Item key={id}>
@@ -49,6 +51,7 @@ const Cast = () => {
           ))}
         </ul>
       )}
+      {status === 'rejected' && <CastError />}
     </div>
   );
 };

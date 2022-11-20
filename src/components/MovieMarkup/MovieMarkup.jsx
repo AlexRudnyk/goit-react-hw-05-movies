@@ -1,12 +1,12 @@
 import { Box } from 'components/Box';
 import { MovieImg } from './MovieMarkup.styled';
 
-const MovieMarkup = ({ movie, error }) => {
+const MovieMarkup = ({ movie }) => {
   const { poster_path, original_title, genres, overview, vote_average } = movie;
 
   return (
     <main>
-      {movie.length !== 0 && !error && (
+      {movie.length !== 0 && (
         <>
           <Box display="flex" mb={5}>
             <MovieImg
